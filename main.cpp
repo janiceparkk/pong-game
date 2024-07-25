@@ -117,6 +117,15 @@ int main () {
         player.Update();
         cpu.Update(ball.y);
 
+        // Check for collisions
+        if (CheckCollisionCircleRec(Vector2{ball.x, ball.y}, ball.radius, Rectangle{player.x, player.y, player.width, player.height})) {
+            ball.speed_x *= -1;
+        }
+
+        if (CheckCollisionCircleRec(Vector2{ball.x, ball.y}, ball.radius, Rectangle{cpu.x, cpu.y, cpu.width, cpu.height})) {
+            ball.speed_x *= -1;
+        }
+
         // 3. Draw game objects in their new positions
         ClearBackground(BLACK); // clear the previous position of white ball
         DrawLine(screen_width/2, 0, screen_width/2, screen_height, WHITE);
