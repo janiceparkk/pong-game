@@ -27,6 +27,18 @@ class Ball {
 };
 
 class Paddle {
+    protected:
+        void LimitMovement() {
+            // paddle can't go out of bounds
+            if (y <= 0) {
+                y = 0;
+            }
+
+            if (y + height >= GetScreenHeight()) {
+                y = GetScreenHeight() - height;
+            }
+        }
+
     public:
         float x, y;
         float width, height;
@@ -46,23 +58,29 @@ class Paddle {
                 y += speed;
             }
 
-            // paddle can't go out of bounds
-            if (y <= 0) {
-                y = 0;
-            }
-
-            if (y + height >= GetScreenHeight()) {
-                y = GetScreenHeight() - height;
-            }
+            LimitMovement();
         }
 };
 
-// class CpuPaddle: public Paddle {
+class CpuPaddle: public Paddle {
+    public:
+        void Update(int ball_y) {
+            // if center of paddle is greater than ball, move paddle up
+            if (y + height/2 > ball_y) {
+                y -= speed;
+            }
 
-// }
+            if (y + height/2 <= ball_y) {
+                y += speed;
+            }
+
+            LimitMovement();
+        }
+};
 
 Ball ball;
 Paddle player;
+CpuPaddle cpu;
 
 int main () {
     const int screen_width = 1280;
@@ -83,19 +101,27 @@ int main () {
     player.y = screen_height/2 - player.height/2;
     player.speed = 6;
 
+    cpu.width = 25;
+    cpu.height = 120;
+    cpu.x = 10;
+    cpu.y = screen_height/2 - cpu.height/2;
+    cpu.speed = 6;
+
     // Game Loop
     while (WindowShouldClose() == false) {
-        BeginDrawing();
         // 1. Check for events
-        
+        BeginDrawing();
+
         // 2. Update positions of game objects
         ball.Update();
         player.Update();
+        cpu.Update(ball.y);
 
         // 3. Draw game objects in their new positions
         ClearBackground(BLACK); // clear the previous position of white ball
         DrawLine(screen_width/2, 0, screen_width/2, screen_height, WHITE);
         ball.Draw();
+        cpu.Draw();
         player.Draw();
         EndDrawing();
     }
