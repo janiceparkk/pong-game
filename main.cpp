@@ -14,6 +14,10 @@ int main () {
         // 1. Check for events
         // 2. Update positions of game objects
         // 3. Draw game objects in their new positions
+        DrawLine(screen_width/2, 0, screen_width/2, screen_height, WHITE);
+        DrawCircle(screen_width/2, screen_height/2, 20, WHITE);
+        DrawRectangle(0, screen_height/2 - 60, 25, 120, WHITE);
+        DrawRectangle(screen_width - 35, screen_height/2 - 60, 25, 120, WHITE);
         EndDrawing();
     }
     
